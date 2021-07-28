@@ -8,8 +8,10 @@ const ExpressError = require("./expressError");
 app.use(express.json());
 
 const compRoute = require("./routes/companies");
-app.use("/companies", compRoute);
+const invRoute = require("./routes/invoices");
 
+app.use("/companies", compRoute);
+app.use("/invoices", invRoute)
 /** 404 handler */
 
 app.use(function (req, res, next) {
