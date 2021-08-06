@@ -4,7 +4,7 @@ const router = express.Router();
 const db = require("../db");
 const slugify = require("slugify");
 
-async function combineCompanies(industries) {
+function combineCompanies(industries) {
   const indResult = industries.map(async (ind) => {
     const compResult = await db.query(
       `SELECT c.code FROM companies AS c
@@ -21,6 +21,7 @@ async function combineCompanies(industries) {
     };
     return ind_comp_res;
   });
+
   return indResult;
 }
 
@@ -30,10 +31,9 @@ router.get("/", async (req, res, next) => {
       `SELECT code, industry 
             FROM industries`
     );
-    const indCompPromises = await combineCompanies(result.rows);
 
-    const finalResult = await Promise.all(indCompPromises);
-    console.log("finalResult", finalResult);
+    const finalResult = await Promise.all(combineCompanies(result.rows));
+
     return res.json({
       industries: finalResult,
     });
